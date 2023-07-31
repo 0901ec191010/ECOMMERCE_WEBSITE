@@ -1,6 +1,8 @@
 const express = require('express')
 const connection = require('./config/connection')
 const User = require("./routes/userRoute")
+const fileUpload = require("express-fileupload");
+
 const app = express();
 const cors = require("cors");
 
@@ -11,6 +13,7 @@ connection();
 //middleware 
 app.use(cors())
 app.use(express.json())
+app.use(fileUpload({useTempFiles:true})) ;
 
 //router middleware
 app.use('/api/user',User)
