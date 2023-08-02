@@ -10,13 +10,14 @@ const registerUser = async (req, res) => {
   if (!name || !email || !mobile || !password) {
     // return next(new ErrorHandler(`Please Enter all the Feilds`, 400))
     return res.json({ data: "fields are required" });
-  }
+  }else{
+
   const userExists = await User.findOne({ email });
   if (userExists) {
     // return next(new ErrorHandler(`User already exits`, 400))
-    // return res.json({data:"user already exits"})
-    console.log("user already exits");
-  }
+    return res.json({data:"user already exits"})
+    // console.log("user already exits");
+  }else{
   const user = await User.create({
     name,
     email,
@@ -33,13 +34,14 @@ const registerUser = async (req, res) => {
       // pic: user.pic,
       // token: generateToken(user._id),
     });
+  }else{
+    return res.status(404).json({ data: "user not found" });
   }
+}}
   // return next(new ErrorHandler(`user not found`, 404))
-  return res.status(404).json({ data: "user not found" });
 };
 
 const authUser = async (req, res) => {
-  console.log("hello");
   const { email, password } = req.body;
   const user = await User.findOne({ email: email });
   // if (user && (await user.matchPassword(password)))
@@ -69,7 +71,7 @@ const getAllUser = async (req, res) => {
 const Forget = async (req, res) => {
   const { email } = req.body;
   const MatchMail = await User.findOne({ email: email });
-  if (email == MatchMail.email) {
+  if (MatchMail.email == email) {
     console.log("matchMail", MatchMail);
     res
       .status(200)
